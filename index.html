@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+<!--<link rel="stylesheet" type="text/css" href="Balloon.css">-->
+
+<!--<script type="text/javascript" src="Balloon.js"></script>-->
+
+<script>
+function Hide(){
+	document.getElementById("Title").style.display = 'none';
+	document.getElementById("MTurkID").style.display = 'none';
+	document.getElementById("Continue").style.display = 'none';
+	document.getElementById("balloon").hidden = false;
+	showTime();
+}
+  
+//设定倒数秒数  
+var t = 6;  
+var repeatCounter = 0;
+var pracFirstIndicator = 0;
+var firstIndicator = 0;
+var pracEndIndicator = 0;
+var t2 = 0;
+var localRepeatCounter = 0;
+var localJudge = 0;
+
+var record="";
+//显示倒数秒数  
+
+function showTime(){  
+	t -= 1;  
+	document.getElementById("showtimes").innerHTML= t+"s";  
+	if(t>0){  
+		//每秒执行一次,showTime()  
+		setTimeout("showTime()",1000); 
+	}  
+	if(t==0){
+	document.getElementById("showtimes").hidden = true;
+	document.getElementById("Timer").hidden = false;
+	t=21 ;
+	pracCountUpTime();
+	pracCountSpace();
+	pracMoveBalloon();
+	}
+}  
+
+function countDownTime(){  
+	document.getElementById("showtimes").hidden = false;  
+	t -= 1;  
+	document.getElementById("showtimes").innerHTML= t+"s"; 
+	document.getElementById("message").hidden = true;	
+	document.getElementById("message2").hidden = true; 
+	if(t>0){  
+		//每秒执行一次,showTime()  
+		setTimeout("countDownTime()",1000); 
+	}  
+	if(t==0){
+		document.getElementById("Timer").innerHTML="Experiment Session";
+		document.getElementById("message").innerHTML = "";	
+		document.getElementById("message").hidden = true;
+		document.getElementById("showtimes").hidden= true; 
+		startExperiment();
+	}
+}
+
+function pracCountUpTime(){
+	t -= 1; 
+	document.getElementById("Timer").innerHTML="Practice Session";
+	document.getElementById("timeCounter").innerHTML="Time Left: "+t+"s";
+	 if(t>0){  
+		//每秒执行一次,showTime()  
+		setTimeout("pracCountUpTime()",1000); 
+	}  
+	if(t==0){
+		document.getElementById("balloon").style.top=300+'px';
+		document.getElementById("Timer").innerHTML="Experiment Session will start in";
+		document.getElementById("timeCounter").innerHTML="";
+		document.getElementById("restart").hidden = true;
+		pracEndIndicator = 1;
+		t=6;
+		countDownTime();
+	}
+}
+
+function countUpTime(){   
+	document.getElementById("timeCounter").innerHTML= "Time Passed: "+t+"s";  
+	setTimeout("countUpTime()",1000); 
+	t += 1;  
+}
+
+function countDownT2(){
+
+	if (t2>0){
+		document.getElementById("message2").innerHTML = "Another trial starts in " + t2 +"s";
+		t2 -= 1;
+		setTimeout("countDownT2()",1000);
+	}
+	else{
+		document.getElementById("message2").innerHTML ="";
+	}
+}
+
+
+function pracMoveBalloon(){
+	document.getElementById("message").hidden = true;
+	document.getElementById("restart").hidden = true;
+	var pic = document.getElementById("balloon");
+
+	var x = pic.style.pixelTop;
+
+	pracFirstIndicator+=1;
+
+	if(pracFirstIndicator==1){
+		pic.style.top = 340+'px';
+		x = 340;
+	}
+
+	if(pracEndIndicator==0){
+		if(repeatCounter==3){
+				 x=340;
+			}
+
+		else if(repeatCounter>=4){
+				 x=140;
+			}
+
+		if(pracFirstIndicator>4){
+			if(repeatCounter<3){
+				 x=350;
+			}
+		}	
+		document.getElementById("balloon").style.top=x+'px'; //Move to some place			
+	}
+
+		if(x==350){	
+
+			pracFirstIndicator=0;
+			t2 = 2;
+			document.getElementById("message").hidden = false;
+			document.getElementById("message").innerHTML = "Game Ends! Press faster!";
+
+			if(t>3){
+				repeatCounter = 0;
+				setTimeout("moveBalloonReady()",1000); 
+				setTimeout("pracMoveBalloon()",3000); 
+			}
+			else{
+				repeatCounter = 0;
+				document.getElementById("message2").innerHTML = "Please wait for the experiment session";
+			}
+		}
+		else if(x<350){
+			setTimeout("pracMoveBalloon()",500); 
+		}	
+
+		repeatCounter = 0;
+	}
+
+function moveBalloonReady(){
+	document.getElementById("message").hidden = true;
+	countDownT2();
+	document.getElementById("balloon").style.top = 300+'px'; //Move to some place	
+}
+
+
+function moveBalloon(){
+	document.getElementById("message").hidden = true;
+	var pic = document.getElementById("balloon");
+	var x = pic.style.pixelTop;
+
+	firstIndicator+=1;
+
+	localJudge+=1;
+
+	if(pracFirstIndicator==1){
+		pic.style.top = 340+'px';
+		x = 340;
+	}
+
+	if(repeatCounter==3){
+				 x=340;
+			}
+
+	else if(repeatCounter>=4){
+			 x=140;
+		}
+
+
+	if(firstIndicator>4){
+		if(repeatCounter<3){
+				 x=350;
+		}
+		pic.style.top=x+'px';//移动的方向；
+	}
+	
+	if(x==350){	
+		document.getElementById("message").innerHTML = "";	
+		setTimeout("displayResult()",500); 
+	}
+
+	else if(x<350){
+		setTimeout("moveBalloon()",500); 
+	}
+
+ 	if(localJudge==1){
+ 		localRepeatCounter+=repeatCounter;
+
+ 	}
+ 	else if(localJudge==2){
+ 		localRepeatCounter+=repeatCounter;
+ 		record += localRepeatCounter.toString();
+ 		localRepeatCounter = 0;
+ 		localJudge = 0;
+ 	}
+
+	repeatCounter = 0;
+}
+
+function startExperiment(){
+		document.getElementById("game").hidden = true;
+		document.getElementById("message").hidden = true;
+		document.getElementById("message2").hidden = true;
+		countUpTime();  
+		countSpace();
+		moveBalloon();
+
+}
+
+function pracCountSpace(){
+	document.onkeydown=function(event){
+	var e = event || window.event || arguments.callee.caller.arguments[0];
+	if(e && e.keyCode==32){ // 按 Esc 
+		repeatCounter+=1;
+		}
+	}
+}
+
+function countSpace(){
+	document.onkeydown=function(event){
+	var e = event || window.event || arguments.callee.caller.arguments[0];
+	if(e && e.keyCode==32){ // 按 Esc 
+		repeatCounter+=1;
+		}
+	}
+}
+
+function displayResult(){
+	document.getElementById("restart").hidden = true;	
+	document.getElementById("balloon").hidden = true;	
+	alert("Game Over!");
+	document.getElementById("timeCounter").style.display = 'none';
+	document.getElementById("Timer").style.display = 'none';
+	document.getElementById("instruction").innerHTML= 'Please click the following link:'
+	document.getElementById("link").hidden = false;
+	document.getElementById("link").href="http://cuhkbaf.qualtrics.com/jfe/form/SV_249B603TTJN1WpD?I="+document.getElementById("MTurkID").value+"&D="+t+"&R='"+record.toString()+"'";
+}
+</script>
+
+
+
+<h3 id="Timer" hidden> Information</h3v>
+
+</head>
+
+
+
+<body>
+<h3 id="Title">Your MTurk ID</h3>
+<input type="text" id="MTurkID"></input>
+<button id="Continue" type="button" onclick="Hide()">continue</button>
+
+<h2 id="showtimes"></h2>
+
+<p id="timeCounter"></p>
+
+<h3 id="message"></h3>
+<h3 id="message2"></h3>
+
+<button id="restart" type="button" onclick="pracMoveBalloon()" hidden>Restart</button>
+<button id="game" type="button" onclick="startExperiment()" hidden>Start Experiment</button>
+
+
+<hr style="width:30px; color=#000000; position:absolute; left:15px; top:591px" size=1  noshade></hr>
+<hr style="width:30px; color=#000000; position:absolute; left:15px; top:391px" size=1  noshade></hr>
+
+
+<hr style="width:30px; color=#000000; position:absolute; left:285px; top:591px" size=1  noshade></hr>
+<hr style="width:30px; color=#000000; position:absolute; left:285px; top:391px" size=1  noshade></hr>
+
+
+<div>
+	<img id ="balloon" src="balloon_red.png" style="width:200px; position:absolute; left:65px;top:300px" hidden ></img>
+</div>
+
+<div>
+	<img id ="needle" src="needle.png" style="width:300px; position:absolute;left:15px;top:605px"></img>
+</div>
+
+<p id="instruction"></p>
+<a id="link" href="" hidden>Click Here</a>
+
+<p id="record"></p>
+
+<br></br>
+
+
+
+</body>
+</html>
