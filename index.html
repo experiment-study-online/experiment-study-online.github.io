@@ -28,6 +28,7 @@ var localRepeatCounter = 0;
 var localJudge = 0;
 var resetRepeatCounter = 0;
 var t3 = 0;
+var gameEndIndicator = 0;
 
 var record="";
 //显示倒数秒数  
@@ -98,13 +99,17 @@ function startCountForExperiment(){
 
 function countUpTime(){   
 	document.getElementById("timeCounter").innerHTML= "Time Passed: "+t+"s";  
-	setTimeout("countUpTime()",1000); 
-	t += 1;  
+	if(gameEndIndicator==0){
+		setTimeout("countUpTime()",1000); 
+		t += 1;  
+	}
 }
 
-function countUpT3(){   
+function countUpT3(){
+	if(gameEndIndicator==0){ 
 	setTimeout("countUpT3()",500); 
 	t3 += 0.5;  
+	}
 }
 
 function countDownT2(){
