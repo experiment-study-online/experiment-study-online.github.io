@@ -26,6 +26,7 @@ var pracEndIndicator = 0;
 var t2 = 0;
 var localRepeatCounter = 0;
 var localJudge = 0;
+var resetRepeatCounter = 0;
 
 var record="";
 //显示倒数秒数  
@@ -76,14 +77,23 @@ function pracCountUpTime(){
 	}  
 	if(t==0){
 		document.getElementById("balloon").style.top=300+'px';
-		document.getElementById("Timer").innerHTML="Experiment Session will start in";
-		document.getElementById("timeCounter").innerHTML="";
-		document.getElementById("restart").hidden = true;
-		pracEndIndicator = 1;
-		t=6;
-		countDownTime();
+		document.getElementById("Timer").innerHTML="End of Practice Session";
+		document.getElementById("message").hidden= true;
+		document.getElementById("message2").hidden= true;
+		document.getElementById("timeCounter").hidden= true;
+		setTimeout("startCountForExperiment()",1000);
+
 	}
 }
+
+function startCountForExperiment(){
+	document.getElementById("Timer").innerHTML="Experiment Session will start in";
+	document.getElementById("timeCounter").innerHTML="";
+	document.getElementById("restart").hidden = true;
+	pracEndIndicator = 1;
+	t=6;
+	countDownTime();
+	}
 
 function countUpTime(){   
 	document.getElementById("timeCounter").innerHTML= "Time Passed: "+t+"s";  
@@ -110,10 +120,14 @@ function pracMoveBalloon(){
 	var pic = document.getElementById("balloon");
 
 
-
 	var x = pic.style.top;
 
 	pracFirstIndicator+=1;
+
+	if(resetRepeatCounter==1){
+		repeatCounter = 0;
+		resetRepeatCounter = 0;
+	}
 
 	if(pracFirstIndicator==1){
 		pic.style.top = 340+'px';
@@ -121,15 +135,22 @@ function pracMoveBalloon(){
 	}
 
 	if(pracEndIndicator==0){
-		if(repeatCounter==3){
-				 x=340+'px';
-			}
+		if(pracFirstIndicator<=4){
 
-		else if(repeatCounter>=4){
-				 x=140+'px';
-			}
+			if(repeatCounter==3){
+					 x=340+'px';
+				}
 
-		if(pracFirstIndicator>4){
+			else if(repeatCounter>=4){
+					 x=140+'px';
+				}
+
+			else if(repeatCounter<3){
+				 	x=340+'px';
+			}	
+		}
+
+		else if(pracFirstIndicator>4){
 			if(repeatCounter<3){
 				 x=350+'px';
 			}
@@ -144,7 +165,8 @@ function pracMoveBalloon(){
 			document.getElementById("message").innerHTML = "Game Ends! Press faster!";
 
 			if(t>3){
-				repeatCounter = 0;
+				resetRepeatCounter = 1;
+				pracFirstIndicator = 0;
 				setTimeout("moveBalloonReady()",1000); 
 				setTimeout("pracMoveBalloon()",3000); 
 			}
@@ -222,6 +244,7 @@ function moveBalloon(){
 }
 
 function startExperiment(){
+		document.getElementById("timeCounter").hidden = false;
 		document.getElementById("game").hidden = true;
 		document.getElementById("message").hidden = true;
 		document.getElementById("message2").hidden = true;
