@@ -233,10 +233,12 @@ function moveBalloon(){
 	
 	if(x=='350px'){	
 		document.getElementById("message").innerHTML = "";	
+		gameEndIndicator = 1;
 		localRepeatCounter+=repeatCounter;
  		record += localRepeatCounter.toString();
  		localRepeatCounter = 0;
  		localJudge = 0;
+
 		setTimeout("displayResult()",500); 
 	}
 
