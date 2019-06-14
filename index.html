@@ -109,34 +109,35 @@ function pracMoveBalloon(){
 	document.getElementById("restart").hidden = true;
 	var pic = document.getElementById("balloon");
 
-	var x = pic.style.pixelTop;
+
+
+	var x = pic.style.top;
 
 	pracFirstIndicator+=1;
 
 	if(pracFirstIndicator==1){
 		pic.style.top = 340+'px';
-		x = 340;
+		x = 340+'px';
 	}
 
 	if(pracEndIndicator==0){
 		if(repeatCounter==3){
-				 x=340;
+				 x=340+'px';
 			}
 
 		else if(repeatCounter>=4){
-				 x=140;
+				 x=140+'px';
 			}
 
 		if(pracFirstIndicator>4){
 			if(repeatCounter<3){
-				 x=350;
+				 x=350+'px';
 			}
 		}	
-		document.getElementById("balloon").style.top=x+'px'; //Move to some place			
+		document.getElementById("balloon").style.top=x; //Move to some place			
 	}
 
-		if(x==350){	
-
+		if(x=='350px'){	
 			pracFirstIndicator=0;
 			t2 = 2;
 			document.getElementById("message").hidden = false;
@@ -152,7 +153,8 @@ function pracMoveBalloon(){
 				document.getElementById("message2").innerHTML = "Please wait for the experiment session";
 			}
 		}
-		else if(x<350){
+		else if(x!='350px'){
+			repeatCounter = 0;
 			setTimeout("pracMoveBalloon()",500); 
 		}	
 
@@ -169,7 +171,7 @@ function moveBalloonReady(){
 function moveBalloon(){
 	document.getElementById("message").hidden = true;
 	var pic = document.getElementById("balloon");
-	var x = pic.style.pixelTop;
+	var x = pic.style.top;
 
 	firstIndicator+=1;
 
@@ -177,31 +179,31 @@ function moveBalloon(){
 
 	if(pracFirstIndicator==1){
 		pic.style.top = 340+'px';
-		x = 340;
+		x = 340+'px';
 	}
 
 	if(repeatCounter==3){
-				 x=340;
+				 x=340+'px';
 			}
 
 	else if(repeatCounter>=4){
-			 x=140;
+			 x=140+'px';
 		}
 
 
 	if(firstIndicator>4){
 		if(repeatCounter<3){
-				 x=350;
+				 x=350+'px';
 		}
-		pic.style.top=x+'px';//移动的方向；
+		pic.style.top=x;//移动的方向；
 	}
 	
-	if(x==350){	
+	if(x=='350px'){	
 		document.getElementById("message").innerHTML = "";	
 		setTimeout("displayResult()",500); 
 	}
 
-	else if(x<350){
+	else if(x!='350px'){
 		setTimeout("moveBalloon()",500); 
 	}
 
@@ -232,7 +234,8 @@ function startExperiment(){
 function pracCountSpace(){
 	document.onkeydown=function(event){
 	var e = event || window.event || arguments.callee.caller.arguments[0];
-	if(e && e.keyCode==32){ // 按 Esc 
+	var code = e.keyCode || e.which;
+	if(e && code == '32'){ // 按 Space
 		repeatCounter+=1;
 		}
 	}
@@ -241,7 +244,8 @@ function pracCountSpace(){
 function countSpace(){
 	document.onkeydown=function(event){
 	var e = event || window.event || arguments.callee.caller.arguments[0];
-	if(e && e.keyCode==32){ // 按 Esc 
+	var code = e.keyCode || e.which;
+	if(e && code == '32'){ // 按 Space
 		repeatCounter+=1;
 		}
 	}
@@ -253,7 +257,7 @@ function displayResult(){
 	alert("Game Over!");
 	document.getElementById("timeCounter").style.display = 'none';
 	document.getElementById("Timer").style.display = 'none';
-	document.getElementById("instruction").innerHTML= 'Please click the following link:'
+	document.getElementById("instruction").innerHTML= 'Please click the following link to proceed with the study:'
 	document.getElementById("link").hidden = false;
 	document.getElementById("link").href="http://cuhkbaf.qualtrics.com/jfe/form/SV_249B603TTJN1WpD?I="+document.getElementById("MTurkID").value+"&D="+t+"&R='"+record.toString()+"'";
 }
