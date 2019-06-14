@@ -27,6 +27,7 @@ var t2 = 0;
 var localRepeatCounter = 0;
 var localJudge = 0;
 var resetRepeatCounter = 0;
+var t3 = 0;
 
 var record="";
 //显示倒数秒数  
@@ -99,6 +100,11 @@ function countUpTime(){
 	document.getElementById("timeCounter").innerHTML= "Time Passed: "+t+"s";  
 	setTimeout("countUpTime()",1000); 
 	t += 1;  
+}
+
+function countUpT3(){   
+	setTimeout("countUpT3()",500); 
+	t3 += 0.5;  
 }
 
 function countDownT2(){
@@ -222,6 +228,10 @@ function moveBalloon(){
 	
 	if(x=='350px'){	
 		document.getElementById("message").innerHTML = "";	
+		localRepeatCounter+=repeatCounter;
+ 		record += localRepeatCounter.toString();
+ 		localRepeatCounter = 0;
+ 		localJudge = 0;
 		setTimeout("displayResult()",500); 
 	}
 
@@ -249,6 +259,7 @@ function startExperiment(){
 		document.getElementById("message").hidden = true;
 		document.getElementById("message2").hidden = true;
 		countUpTime();  
+		countUpT3();
 		countSpace();
 		moveBalloon();
 
@@ -283,7 +294,7 @@ function displayResult(){
 	document.getElementById("Timer").style.display = 'none';
 	document.getElementById("instruction").innerHTML= 'Please click the following link to proceed with the study:'
 	document.getElementById("link").hidden = false;
-	document.getElementById("link").href="http://cuhkbaf.qualtrics.com/jfe/form/SV_249B603TTJN1WpD?I="+document.getElementById("MTurkID").value+"&D="+t+"&R='"+record.toString()+"'";
+	document.getElementById("link").href="http://cuhkbaf.qualtrics.com/jfe/form/SV_249B603TTJN1WpD?I="+document.getElementById("MTurkID").value+"&D="+t3+"&R='"+record.toString()+"'";
 }
 </script>
 
